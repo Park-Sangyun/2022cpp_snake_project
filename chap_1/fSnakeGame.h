@@ -28,7 +28,7 @@ private:
 	bool bEatsFruit;
 	bool bEatsPoison;
 	CharPosition fruit; // need to clarify this combination 
-	CharPosition Poison;
+	CharPosition poison;
 	std::vector<CharPosition> snake; // represent the snake's body
 
 	void InitGameWindow();
