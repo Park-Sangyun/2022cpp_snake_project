@@ -38,6 +38,7 @@ fSnakeGame::fSnakeGame()
 	DrawWindow();
 	DrawSnake();
 	PrintScore();
+	PrintMission();
 
 	refresh();
 }
@@ -118,6 +119,36 @@ void fSnakeGame::PrintScore()
 	printw("- : %d", poisoncnt);
 	move(4, 22);
 	printw("G : ");
+	return;
+}
+
+void fSnakeGame::PrintMission()
+{
+	move(7, 22);
+	printw("Mission");
+	move(8, 22);
+	printw("B : 10");
+	move(8, 29);
+	if(maxsize >= 10)
+		printw("(v)");
+	else
+		printw("( )");
+	move(9, 22);
+	printw("+ : 5");
+	move(9, 28);
+	if(fruitcnt >= 5)
+		printw("(v)");
+	else
+		printw("( )");
+	move(10, 22);
+	printw("- : 2");
+	move(10, 28);
+	if(poisoncnt >= 2)
+		printw("(v)");
+	else
+		printw("( )");
+	move(11, 22);
+	printw("G : 1");
 	return;
 }
 
@@ -228,6 +259,7 @@ bool fSnakeGame::GetsFruit()
 			maxsize++;
 		}
 		PrintScore();
+		PrintMission();
 
 		return bEatsFruit = true;
 	}
@@ -247,6 +279,7 @@ bool fSnakeGame::GetsPoison()
 		poisoncnt++;
 		nowsize = snake.size() - 1;
 		PrintScore();
+		PrintMission();
 
 		return bEatsPoison = true;
 	}
