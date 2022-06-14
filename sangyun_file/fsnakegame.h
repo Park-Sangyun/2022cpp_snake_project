@@ -6,20 +6,17 @@
 #ifndef FSNAKEGAME_H
 #define FSNAKEGAME_H
 
-// Unreal standards
-using int32 = int;
-
 struct CharPosition
 {
-	int32 x, y;
-	CharPosition(int32 col, int32 row);
+	int x, y;
+	CharPosition(int col, int row);
 	CharPosition();
 };
 
 class fSnakeGame
 {
 private:
-	int32 score, del, maxwidth, maxheight;
+	int nowsize = 3, maxsize = 3, del, width = 21, height = 21, fruitcnt = 0, poisoncnt = 0;
 	char direction, partchar, edgechar, fruitchar, poisonchar;
 	// partchar is the character representing the snake's body
 	// edgechar is the character representing the edge of the game window
