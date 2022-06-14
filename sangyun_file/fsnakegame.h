@@ -32,6 +32,7 @@ private:
 	void DrawWindow();
 	void DrawSnake();
 	void PrintScore();
+	void PrintMission();
 	void PositionFruit();
 	void PositionPoison();
 	bool FatalCollision();
