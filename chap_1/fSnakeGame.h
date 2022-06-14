@@ -20,13 +20,15 @@ class fSnakeGame
 {
 private:
 	int32 score, del, maxwidth, maxheight;
-	char direction, partchar, edgechar, fruitchar;
+	char direction, partchar, edgechar, fruitchar, poisonchar;
 	// partchar is the character representing the snake's body
 	// edgechar is the character representing the edge of the game window
 	// fruitchar is the character representing the fruit
 	// del stands for delay
 	bool bEatsFruit;
+	bool bEatsPoison;
 	CharPosition fruit; // need to clarify this combination 
+	CharPosition Poison;
 	std::vector<CharPosition> snake; // represent the snake's body
 
 	void InitGameWindow();
@@ -34,6 +36,7 @@ private:
 	void DrawSnake();
 	void PrintScore();
 	void PositionFruit();
+	void PositionPoison();
 	bool FatalCollision();
 	void MoveSnake();
 	bool GetsFruit();
