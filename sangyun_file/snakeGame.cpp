@@ -1,7 +1,5 @@
 #include "snakeGame.h"
 
-using namespace std;
-
 position::position(int col, int row)
 {
 	x = col;
@@ -16,8 +14,8 @@ position::position()
 
 snakeGame::snakeGame()
 {
-	fruit.x = 0;
-	fruit.y = 0;
+	growth.x = 0;
+	growth.y = 0;
 	poison.x = 0;
 	poison.y = 0;
 	direction = 'l';
@@ -29,12 +27,12 @@ snakeGame::snakeGame()
 	noecho();
 	curs_set(0);
 
-	PositionFruit();
-	PositionPoison();
-	DrawWindow();
-	DrawSnake();
-	PrintScore();
-	PrintMission();
+	posGrowth();
+	posPoison();
+	makeMap();
+	makeSnake();
+	printScore();
+	printMission();
 
 	refresh();
 }
@@ -46,7 +44,7 @@ snakeGame::~snakeGame()
 	endwin();
 }
 
-void snakeGame::DrawWindow()
+void snakeGame::makeMap()
 {
 	for (int i = 0; i < wall; i++)
 	{
@@ -82,7 +80,7 @@ void snakeGame::DrawWindow()
 	return;
 }
 
-void snakeGame::DrawSnake()
+void snakeGame::makeSnake()
 {
 	for (int i = 0; i < 3; i++)
 	{
@@ -99,182 +97,7 @@ void snakeGame::DrawSnake()
 	return;
 }
 
-void snakeGame::PrintScore()
-{
-	move(0, 22);
-	printw("Score Board");
-	move(1, 22);
-	printw("B : %d / %d", nowsize, bestsize);
-	move(2, 22);
-	printw("+ : %d", fruitcnt);
-	move(3, 22);
-	printw("- : %d", poisoncnt);
-	move(4, 22);
-	printw("G : ");
-	return;
-}
-
-void snakeGame::PrintMission()
-{
-	move(7, 22);
-	printw("Mission");
-	move(8, 22);
-	printw("B : 10");
-	move(8, 29);
-	if(bestsize >= 10)
-		printw("(v)");
-	else
-		printw("( )");
-	move(9, 22);
-	printw("+ : 5");
-	move(9, 28);
-	if(fruitcnt >= 5)
-		printw("(v)");
-	else
-		printw("( )");
-	move(10, 22);
-	printw("- : 2");
-	move(10, 28);
-	if(poisoncnt >= 2)
-		printw("(v)");
-	else
-		printw("( )");
-	move(11, 22);
-	printw("G : 1");
-	return;
-}
-
-void snakeGame::PositionFruit()
-{
-	while(1)
-	{
-		int tmpx = rand()%wall+1;
-		int tmpy = rand()%wall+1;
-
-		for (int i = 0; i < snake.size(); i++)
-		{
-			if (snake[i].x == tmpx && snake[i].y == tmpy)
-			{
-				continue;
-			}
-		}
-
-		if (tmpx >= wall-1 || tmpy >= wall-1)
-		{
-			continue;
-		}
-
-		fruit.x = tmpx;
-		fruit.y = tmpy;
-		break;
-	}
-
-	move(fruit.y, fruit.x);
-	addch(fruitshape);
-	refresh();
-}
-
-void snakeGame::PositionPoison()
-{
-	while(1)
-	{
-		int tmpx = rand()%wall+1;
-		int tmpy = rand()%wall+1;
-
-		for (int i = 0; i < snake.size(); i++)
-		{
-			if (snake[i].x == tmpx && snake[i].y == tmpy)
-			{
-				continue;
-			}
-		}
-
-		if (tmpx >= wall-1 || tmpy >= wall-1)
-		{
-			continue;
-		}
-
-		poison.x = tmpx;
-		poison.y = tmpy;
-		break;
-	}
-
-	move(poison.y, poison.x);
-	addch(poisonshape);
-	refresh();
-}
-
-bool snakeGame::fail()
-{
-	if (snake[0].x == 0 || snake[0].x == wall - 1 || snake[0].y == 0 || snake[0].y == wall - 1)
-	{
-		return true;
-	}
-
-	for (int i = 2; i < snake.size(); i++)
-	{
-		if (snake[0].x == snake[i].x && snake[0].y == snake[i].y)
-		{
-			return true;
-		}
-	}
-
-	if (snake.size() < 3)
-	{
-		return true;
-	}
-
-  if(dirFail)
-  {
-    return true;
-  }
-
-	return false;
-}
-
-bool snakeGame::GetsFruit()
-{
-	if (snake[0].x == fruit.x && snake[0].y == fruit.y)
-	{
-		PositionFruit();
-		fruitcnt++;
-		nowsize = snake.size() + 1;
-		if(bestsize <= snake.size())
-		{
-			bestsize++;
-		}
-		PrintScore();
-		PrintMission();
-
-		return eatFruit = true;
-	}
-	else
-	{
-		return eatFruit = false;
-	}
-	return eatFruit;
-}
-
-bool snakeGame::GetsPoison()
-{
-	if (snake[0].x == poison.x && snake[0].y == poison.y)
-	{
-		PositionPoison();
-		poisoncnt++;
-		nowsize = snake.size() - 1;
-		PrintScore();
-		PrintMission();
-
-		return eatPoison = true;
-	}
-	else
-	{
-		return eatPoison = false;
-	}
-	return eatPoison;
-}
-
-void snakeGame::MoveSnake()
+void snakeGame::moveSnake()
 {
 	int KeyPressed = getch();
 	switch(KeyPressed)
@@ -321,7 +144,7 @@ void snakeGame::MoveSnake()
 			break;
 	}
 
-	if (!eatFruit)
+	if (!eatgrowth)
 	{
 		move(snake[snake.size()-1].y, snake[snake.size()-1].x);
 		printw(" ");
@@ -362,28 +185,215 @@ void snakeGame::MoveSnake()
 	return;
 }
 
+void snakeGame::printScore()
+{
+	move(0, 22);
+	printw("Score Board");
+	move(1, 22);
+	printw("B : %d / %d", nowsize, bestsize);
+	move(2, 22);
+	printw("+ : %d", growthcnt);
+	move(3, 22);
+	printw("- : %d", poisoncnt);
+	move(4, 22);
+	printw("G : ");
+	return;
+}
+
+void snakeGame::printMission()
+{
+	move(7, 22);
+	printw("Mission");
+	move(8, 22);
+	printw("B : 10");
+	move(8, 29);
+	if(bestsize >= 10)
+		printw("(v)");
+	else
+		printw("( )");
+	move(9, 22);
+	printw("+ : 5");
+	move(9, 28);
+	if(growthcnt >= 5)
+		printw("(v)");
+	else
+		printw("( )");
+	move(10, 22);
+	printw("- : 2");
+	move(10, 28);
+	if(poisoncnt >= 2)
+		printw("(v)");
+	else
+		printw("( )");
+	move(11, 22);
+	printw("G : 1");
+	return;
+}
+
+void snakeGame::posGrowth()
+{
+	while(1)
+	{
+		int posx = rand()%wall+1;
+		int posy = rand()%wall+1;
+
+		for (int i = 0; i < snake.size(); i++)
+		{
+			if (snake[i].x == posx && snake[i].y == posy)
+			{
+				continue;
+			}
+		}
+
+		if (posx >= wall-1 || posy >= wall-1)
+		{
+			continue;
+		}
+
+		growth.x = posx;
+		growth.y = posy;
+		break;
+	}
+
+	move(growth.y, growth.x);
+	addch(growthshape);
+	refresh();
+}
+
+void snakeGame::posPoison()
+{
+	while(1)
+	{
+		int posx = rand()%wall+1;
+		int posy = rand()%wall+1;
+
+		for (int i = 0; i < snake.size(); i++)
+		{
+			if (snake[i].x == posx && snake[i].y == posy)
+			{
+				continue;
+			}
+		}
+
+		if (posx >= wall-1 || posy >= wall-1)
+		{
+			continue;
+		}
+
+		poison.x = posx;
+		poison.y = posy;
+		break;
+	}
+
+	move(poison.y, poison.x);
+	addch(poisonshape);
+	refresh();
+}
+
+bool snakeGame::getGrowth()
+{
+	if (snake[0].x == growth.x && snake[0].y == growth.y)
+	{
+		posGrowth();
+		growthcnt++;
+		nowsize = snake.size() + 1;
+		if(bestsize <= snake.size())
+		{
+			bestsize++;
+		}
+		printScore();
+		printMission();
+
+		return eatgrowth = true;
+	}
+	else
+	{
+		return eatgrowth = false;
+	}
+	return eatgrowth;
+}
+
+bool snakeGame::getPoison()
+{
+	if (snake[0].x == poison.x && snake[0].y == poison.y)
+	{
+		posPoison();
+		poisoncnt++;
+		nowsize = snake.size() - 1;
+		printScore();
+		printMission();
+
+		return eatPoison = true;
+	}
+	else
+	{
+		return eatPoison = false;
+	}
+	return eatPoison;
+}
+
+bool snakeGame::fail()
+{
+	if (snake[0].x == 0 || snake[0].x == wall - 1 || snake[0].y == 0 || snake[0].y == wall - 1)
+	{
+		return true;
+	}
+
+	for (int i = 2; i < snake.size(); i++)
+	{
+		if (snake[0].x == snake[i].x && snake[0].y == snake[i].y)
+		{
+			return true;
+		}
+	}
+
+	if (snake.size() < 3)
+	{
+		return true;
+	}
+
+  if(dirFail)
+  {
+    return true;
+  }
+
+	return false;
+}
+
+bool snakeGame::clear()
+{
+  if(bestsize >= 10 && growthcnt >= 5 && poisoncnt >= 2)
+  {
+    return true;
+  }
+  return false;
+}
+
 void snakeGame::playGame()
 {
-    while(1)
-    {
-        if (fail())
-        {
-            move(10, 6);
-            printw("GAME OVER");
-            move(11, 3);
-            printw("press any key..");
-            break;
-        }
+  while(1)
+  {
+      if(fail())
+      {
+        move(10, 4);
+        printw("  GAME OVER  ");
+        move(11, 2);
+        printw(" press any key.. ");
+        break;
+      }
+      if(clear())
+      {
+        move(10, 3);
+        printw("  GAME CLEAR!  ");
+        move(11, 2);
+        printw(" press any key.. ");
+        break;
+      }
 
-        GetsFruit();
-        GetsPoison();
-        MoveSnake();
+      getGrowth();
+      getPoison();
+      moveSnake();
 
-        if (direction=='q') //exit
-        {
-        	break;
-        }
-
-        usleep(150000); // delay
-    }
+      usleep(150000); // delay
+      }
 }
