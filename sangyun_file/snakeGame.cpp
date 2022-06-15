@@ -23,7 +23,12 @@ snakeGame::snakeGame()
 	direction = 'l';
 	srand(time(NULL));
 
-	InitGameWindow();
+  initscr();
+	nodelay(stdscr,TRUE);
+	keypad(stdscr, true);
+	noecho();
+	curs_set(0);
+
 	PositionFruit();
 	PositionPoison();
 	DrawWindow();
@@ -39,17 +44,6 @@ snakeGame::~snakeGame()
 	nodelay(stdscr, false);
 	getch();
 	endwin();
-}
-
-// initialise the game window
-void snakeGame::InitGameWindow()
-{
-	initscr(); // initialise the screen
-	nodelay(stdscr,TRUE);
-	keypad(stdscr, true); // initialise the keyboard: we can use arrows for directions
-	noecho(); // user input is not displayed on the screen
-	curs_set(0); // cursor symbol is not not displayed on the screen (Linux)
-	return;
 }
 
 void snakeGame::DrawWindow()
@@ -337,8 +331,8 @@ void snakeGame::MoveSnake()
 
 	if (eatPoison)
 	{
-		move(snake[snake.size()-1].y, snake[snake.size()-1].x); // moves at the end of the tail
-		printw(" "); // add empty ch to remove last character
+		move(snake[snake.size()-1].y, snake[snake.size()-1].x);
+		printw(" ");
 		refresh();
 		snake.pop_back();
 	}
