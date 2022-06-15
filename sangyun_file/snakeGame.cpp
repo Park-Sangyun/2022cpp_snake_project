@@ -296,10 +296,10 @@ bool snakeGame::getGrowth()
 	{
 		posGrowth();
 		growthcnt++;
-		nowsize = snake.size() + 1;
-		if(bestsize <= snake.size())
+		nowsize++;
+		if(bestsize <= nowsize)
 		{
-			bestsize++;
+			bestsize = nowsize;
 		}
 		printScore();
 		printMission();
@@ -319,7 +319,7 @@ bool snakeGame::getPoison()
 	{
 		posPoison();
 		poisoncnt++;
-		nowsize = snake.size() - 1;
+		nowsize--;
 		printScore();
 		printMission();
 
