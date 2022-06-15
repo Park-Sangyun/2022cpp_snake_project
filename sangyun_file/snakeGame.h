@@ -16,9 +16,10 @@ class snakeGame
 {
 private:
 	int nowsize = 3, bestsize = 3, wall = 21, fruitcnt = 0, poisoncnt = 0;
-	char direction, head, body, edgechar, fruitshape, poisonshape;
-	bool eatFruit;
-	bool eatPoison;
+	char direction, head = 'o', body = 'x', fruitshape = '*', poisonshape = '#';
+	bool eatFruit = false;
+	bool eatPoison = false;
+  bool dirFail = false;
 	position fruit;
 	position poison;
 	std::vector<position> snake;
