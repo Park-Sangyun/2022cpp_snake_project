@@ -1,35 +1,32 @@
-#include "fSnakeGame.h"
+#include "snakeGame.h"
 
-int width = 21, height = 21;
-void PlayGame();
-int IsUserReady();
+void playGame();
+int ready();
 int AskUserToPlayAgain();
 void ClearCentre();
 int UserInput();
 
 int main ()
 {
-	if (IsUserReady() == 'y') // wait for confirmation of the user
+	if (ready() == 'y')
 	do {
 		{
-			fSnakeGame NewSnake;
-			NewSnake.PlayGame();
+			snakeGame NewSnake;
+			NewSnake.playGame();
 		}
 	}
 	while (AskUserToPlayAgain() == 'y');
 	return 0;
 }
 
-// clear the screen and centre the cursor
 void ClearCentre(float x, float y)
 {
-	clear(); // clear the screen if the game is played for the 2nd time
+	clear();
 	initscr();
 	noecho();
-	move((height/y), (width/x));
+	move(x, y);
 }
 
-// receive user confirmation
 int UserInput()
 {
 	int UserInput = getch();
@@ -40,18 +37,18 @@ int UserInput()
 	return UserInput;
 }
 
-// print start menu
-int IsUserReady()
+int ready()
 {
-	ClearCentre(3, 2.5);
-	printw("Welcome to the Snake Game. Are you ready? (y/n)");
+	ClearCentre(10, 1);
+	printw("Are you ready? (y/n)");
 	return UserInput();
 }
 
-// print end of the game menu and ask user to play again
 int AskUserToPlayAgain()
 {
-	ClearCentre(2.5, 2.5);
-	printw("Do you want to play again? (y/n)");
+	move(10, 6);
+	printw("try again?");
+  move(11, 3);
+  printw("     (y/n)     ");
 	return UserInput();
 }
