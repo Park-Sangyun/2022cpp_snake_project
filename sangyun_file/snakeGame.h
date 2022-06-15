@@ -37,7 +37,7 @@ private:
 	bool getPoison();
 	bool fail();
   bool clear();
-	
+
 public:
 	snakeGame();
 	~snakeGame();
