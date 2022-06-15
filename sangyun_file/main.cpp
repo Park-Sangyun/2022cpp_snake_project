@@ -1,7 +1,5 @@
 #include "snakeGame.h"
 
-void playGame();
-
 int input()
 {
 	int input = getch();
@@ -23,8 +21,8 @@ int ready()
 
 int playAgain()
 {
-	move(10, 6);
-	printw("try again?");
+	move(10, 4);
+	printw("  try again?  ");
   move(11, 3);
   printw("     (y/n)     ");
 	return input();
