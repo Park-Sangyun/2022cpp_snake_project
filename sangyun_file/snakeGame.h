@@ -19,12 +19,11 @@ private:
 	char direction, head = 'o', body = 'x', fruitshape = '*', poisonshape = '#';
 	bool eatFruit = false;
 	bool eatPoison = false;
-  bool dirFail = false;
+  	bool dirFail = false;
 	position fruit;
 	position poison;
 	std::vector<position> snake;
 
-	void InitGameWindow();
 	void DrawWindow();
 	void DrawSnake();
 	void PrintScore();
