@@ -1,9 +1,11 @@
 #include <iostream>
-#include <vector>
 #include <ncurses.h>
+#include <vector>
 #include <unistd.h>
-#ifndef SNAKEGAME_H
-#define SNAKEGAME_H
+#ifndef _SNAKEGAME_H_
+#define _SNAKEGAME_H_
+
+using namespace std;
 
 struct position
 {
@@ -15,26 +17,27 @@ struct position
 class snakeGame
 {
 private:
-	int nowsize = 3, bestsize = 3, wall = 21, fruitcnt = 0, poisoncnt = 0;
-	char direction, head = 'o', body = 'x', fruitshape = '*', poisonshape = '#';
-	bool eatFruit = false;
+	int nowsize = 3, bestsize = 3, wall = 21, growthcnt = 0, poisoncnt = 0;
+	char direction, head = 'o', body = 'x', growthshape = '*', poisonshape = '#';
+	bool eatgrowth = false;
 	bool eatPoison = false;
-  	bool dirFail = false;
-	position fruit;
+  bool dirFail = false;
+	position growth;
 	position poison;
 	std::vector<position> snake;
 
-	void DrawWindow();
-	void DrawSnake();
-	void PrintScore();
-	void PrintMission();
-	void PositionFruit();
-	void PositionPoison();
+	void makeMap();
+	void makeSnake();
+  void moveSnake();
+	void printScore();
+	void printMission();
+	void posGrowth();
+	void posPoison();
+  bool getGrowth();
+	bool getPoison();
 	bool fail();
-	void MoveSnake();
-	bool GetsFruit();
-	bool GetsPoison();
-
+  bool clear();
+	
 public:
 	snakeGame();
 	~snakeGame();
