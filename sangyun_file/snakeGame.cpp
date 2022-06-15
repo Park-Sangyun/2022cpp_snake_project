@@ -16,16 +16,10 @@ position::position()
 
 snakeGame::snakeGame()
 {
-	head = 'o';
-	body = 'x';
-	fruitshape = '*';
-	poisonshape = '#';
 	fruit.x = 0;
 	fruit.y = 0;
 	poison.x = 0;
 	poison.y = 0;
-	bool eatFruit = 0;
-	bool eatPoison = 0;
 	direction = 'l';
 	srand(time(NULL));
 
@@ -236,6 +230,11 @@ bool snakeGame::fail()
 		return true;
 	}
 
+  if(dirFail)
+  {
+    return true;
+  }
+
 	return false;
 }
 
@@ -287,23 +286,44 @@ void snakeGame::MoveSnake()
 	switch(KeyPressed)
 	{
 		case KEY_LEFT:
-			if (direction != 'r')
-			{ direction = 'l'; }
+			if (direction == 'r')
+      {
+        dirFail = true;
+      }
+      else
+      {
+        direction = 'l';
+      }
 			break;
 		case KEY_RIGHT:
-			if (direction != 'l')
-			{ direction = 'r'; }
+			if (direction == 'l')
+      {
+        dirFail = true;
+      }
+      else
+      {
+        direction = 'r';
+      }
 			break;
 		case KEY_UP:
-			if (direction != 'd')
-			{ direction = 'u'; }
+			if (direction == 'd')
+      {
+        dirFail = true;
+      }
+      else
+      {
+        direction = 'u';
+      }
 			break;
 		case KEY_DOWN:
-			if (direction != 'u')
-			{ direction = 'd'; }
-			break;
-		case KEY_BACKSPACE:
-			direction = 'q';
+			if (direction == 'u')
+      {
+        dirFail = true;
+      }
+      else
+      {
+        direction = 'd';
+      }
 			break;
 	}
 
@@ -324,13 +344,21 @@ void snakeGame::MoveSnake()
 	}
 
 	if (direction == 'l')
+  {
     snake.insert(snake.begin(), position(snake[0].x-1, snake[0].y));
+  }
 	else if (direction == 'r')
+  {
 	  snake.insert(snake.begin(), position(snake[0].x+1, snake[0].y));
+  }
 	else if (direction == 'u')
+  {
 	  snake.insert(snake.begin(), position(snake[0].x, snake[0].y-1));
+  }
 	else if (direction == 'd')
+  {
 	  snake.insert(snake.begin(), position(snake[0].x, snake[0].y+1));
+  }
 
 	move(snake[0].y, snake[0].x);
 	addch(head);
